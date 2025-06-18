@@ -11,11 +11,20 @@ frontEnd/*.js
 
 frontEnd/package-lock.json
 
-my-app
-
 app.exe
 
 out
 
 *.exe
 
+document
+
+backupDataBase.txt
+backupFile.txt
+*.mp3
+*.wav
+*.ogg
+Spectrogram.png
+Spectrogram2.png
+videoframe_80712.png
+.env

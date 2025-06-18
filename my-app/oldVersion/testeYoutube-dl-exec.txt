@@ -1,0 +1,45 @@
+const youtubedl = require('youtube-dl-exec')
+const fs = require('fs')
+
+const url ='https://www.youtube.com/watch?v=Xt47EqrOsLE'
+
+const teste = async () => {
+
+
+    const metadado = await youtubedl(url, {
+        // dumpSingleJson: true,
+        format: 'bestaudio',
+        // getFilename: true,
+        // getDuration: true
+        dumpJson: true,
+        // noProgress: true        
+    })
+    // const thumbanil = metadado
+    const fileSizeInBytes = metadado.filesize
+    // console.log(fileSizeInBytes)
+    // console.log(thumbanil)
+
+    let lastValue = -1
+    // console.log(fileSizeInBytes)
+    let videoBuffer = Buffer.from([])
+    await youtubedl.exec(url, {
+    //   output: 'casa.mp4',
+        o: '-',
+        format: 'bestaudio'
+    }).stdout.on('data', (chunk) => {
+        videoBuffer = Buffer.concat([videoBuffer, chunk])
+        let porcentage = Math.round((videoBuffer.length / fileSizeInBytes) * 100)
+        if(porcentage !== lastValue){
+
+            console.log(porcentage)
+            lastValue = porcentage
+        }
+    
+    }).on('close', () => {
+        console.log(videoBuffer.length, fileSizeInBytes)
+        fs.writeFileSync('video2.mp3', videoBuffer)
+    })
+}
+
+
+teste()

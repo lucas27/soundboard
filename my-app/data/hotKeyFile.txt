@@ -1,0 +1,12 @@
+{
+  "MainDevice": [
+    "LeftControl",
+    "LeftShift",
+    "I"
+  ],
+  "VirtualDevice": [
+    "LeftControl",
+    "LeftShift",
+    "P"
+  ]
+}
