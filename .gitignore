@@ -11,12 +11,18 @@ frontEnd/*.js
 
 frontEnd/package-lock.json
 
+<<<<<<< HEAD
+=======
+my-app
+
+>>>>>>> bf0b500 (versao 1.0.0)
 app.exe
 
 out
 
 *.exe
 
+<<<<<<< HEAD
 document
 
 backupDataBase.txt
@@ -28,3 +34,7 @@ Spectrogram.png
 Spectrogram2.png
 videoframe_80712.png
 .env
+my-app
+test.py
+=======
+>>>>>>> bf0b500 (versao 1.0.0)

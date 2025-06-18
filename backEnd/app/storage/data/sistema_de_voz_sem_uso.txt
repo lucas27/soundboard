@@ -1,0 +1,66 @@
+mport pyaudio
+import numpy as np
+p = pyaudio.PyAudio()
+
+
+info = p.get_host_api_info_by_index(0)
+numdevices = info.get('deviceCount')
+# print("Dispositivos de áudio com suporte para entrada (PyAudio):")
+for i in range(numdevices):
+    if (p.get_device_info_by_host_api_device_index(0, i).get('maxOutputChannels')) > 0:
+        print(f"Índice: {i}, Nome_output: {p.get_device_info_by_host_api_device_index(0, i).get('name')}")
+    if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+        print(f"Índice: {i}, Nome_input: {p.get_device_info_by_host_api_device_index(0, i).get('name')}")
+
+i
+
+def main():
+    p = pyaudio.PyAudio()
+    format = pyaudio.paInt16
+    channels = 1  # Mono
+    rate = 44100
+    chunk = 1024
+
+    mic_input_index = 3
+    system_audio_input_index = 1  # Onde o som do PC está saindo
+    v_cable_output_index = 13    # Para o Discord
+    headphones_output_index = 17
+
+    try:
+        mic_stream_in = p.open(format=format, channels=channels, rate=rate, input=True, frames_per_buffer=chunk, input_device_index=mic_input_index)
+        system_stream_in = p.open(format=format, channels=channels, rate=rate, input=True, frames_per_buffer=chunk, input_device_index=system_audio_input_index)
+        discord_stream_out = p.open(format=format, channels=channels, rate=rate, output=True, frames_per_buffer=chunk, output_device_index=v_cable_output_index)
+        headphones_stream_out = p.open(format=format, channels=channels, rate=rate, output=True, frames_per_buffer=chunk, output_device_index=headphones_output_index)
+
+        print("Capturando e roteando áudio...")
+
+        while True:
+            try:
+                mic_data = mic_stream_in.read(chunk)
+                system_data = system_stream_in.read(chunk)
+
+                mic_audio = np.frombuffer(mic_data, dtype=np.int16)
+                system_audio = np.frombuffer(system_data, dtype=np.int16)
+
+                # Misturar o áudio para o Discord
+                mixed_audio_for_discord = (mic_audio * 0.5 + system_audio * 0.5).astype(np.int16).tobytes()
+                discord_stream_out.write(mic_audio.tobytes())
+
+                # Enviar o áudio do sistema para os fones de ouvido (para você ouvir)
+                headphones_stream_out.write(system_data)
+
+            except KeyboardInterrupt:
+                break
+
+    except Exception as e:
+        print(f"Erro: {e}")
+
+    finally:
+        for stream in [mic_stream_in, system_stream_in, discord_stream_out, headphones_stream_out]:
+            if stream and stream.is_active():
+                stream.stop_stream()
+                stream.close()
+        p.terminate()
+
+if __name__ == "__main__":
+    main()
