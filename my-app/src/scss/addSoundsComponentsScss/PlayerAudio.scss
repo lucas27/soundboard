@@ -1,0 +1,202 @@
+@import '../variables.scss';
+// @import 'component-playerAudio.css';
+
+.playerAudiodisplayShow {
+    display: flex;
+}
+
+.playerAudiodisplayHidden {
+    display: none;
+}
+
+.box-father{
+    display: flex;
+    justify-content: center;
+}
+
+.box-player {
+    position: relative;
+    width: 60%;
+    flex-direction: column;
+    align-items: center;
+    margin: 8px;
+    background: $background;
+    padding: 10px;
+    // background-color: #36363665; /* Cor branca com 20% de opacidade */
+    // background: rgba(30, 30, 30, 0.4); /* Cor #1E1E1E com 40% de opacidade */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+//     /* Sombra interna e externa para dar profundidade e brilho */
+    box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.2), /* Sombra externa */
+    inset 0 1px 0 rgba(255, 255, 255, 0.1), /* Brilho interno na parte superior */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1); /* Sombra interna na parte inferior */
+    border-radius: 20px;
+}
+
+.box-player::after, .box-player::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    // background-image: conic-gradient(from var(--angle), transparent, $textColor);
+    background: $textBackground;
+    translate: -50% -50%;
+    z-index: -1;
+    padding: 3.5px;
+    border-radius: 20px;
+    // animation: 3s spin linear infinite;
+    
+}
+.box-player::before {
+    filter: blur(1.6em);
+    opacity: 0.2;
+}
+
+// @keyframes spin {
+//     0%{
+//         --angle: 0deg;
+//     }
+//     100% {
+//         --angle: 360deg;
+//     }
+// }
+
+.box-bar {
+    // box-sizing: border-box;
+    // padding: 0;
+    top: 5px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 75%;
+    height: 12px;
+    // border: 4px solid $gradientGreen;
+    // border-radius: 10px;
+    // justify-content: flex-start;
+}
+
+.progressBar {
+    // position: absolute;
+    // position: relative;
+    --progress-bar: 0%;
+    -webkit-appearance: none; 
+    background: linear-gradient(to right, ($gradientBlue, $gradientGreen) var(--progress-bar), transparent 5%);
+    transition: all 0.3s ease;
+    border: 3px solid $gradientGreen;
+    border-radius: 20px;
+    // margin-right: -100px;
+    width: 100%;
+    height: 8px;
+    // margin: -20px;
+    // accent-color: $gradientGreen;
+    // justify-content: center;
+    // align-items: center;
+}
+
+.progressBar::-webkit-slider-runnable-track {
+    // background: linear-gradient(to right, $gradientBlue, $gradientGreen);
+    border-radius: 20px;
+    height: 100%;
+    margin-left: -2px;
+    margin-right: -3px;
+}
+.progressBar::-webkit-slider-thumb {
+    // -webkit-appearance: none;
+    appearance: none;
+    margin-top: -6px;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: $gradientGreen;
+    cursor: pointer;
+}
+
+
+.time{
+    display: flex;
+    width: 80%;
+    margin-top: 12px;
+    justify-content: space-between;
+}
+
+.currentTime {
+    color: $gradientBlue;
+    font-family: $fontFamily;
+}
+
+.totalTime {
+    color: $gradientGreen;
+    font-family: $fontFamily;
+}
+
+.box-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 50%;
+}
+
+.icon-pause {
+    background-image:url('../../icon/pause-solid.svg') ;
+    background-size: 20px;
+}
+
+.icon-play {
+    background-image:url('../../icon/play-solid-full.svg') ;
+    background-size: 30px;
+}
+
+.backButton {
+    background-image: url('../../icon/backward-solid-full.svg');
+    filter: invert(100%);
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 45px;
+    width: 45px;
+    background-color: transparent;
+    border: none;
+    // border-radius: 10px;
+}
+
+
+.playAndPauseButton {
+    filter: invert(100%);
+    border: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    // background-size: 30px;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0px 0.6px 4px 3px black;
+}
+
+
+.forwardButton {
+    filter: invert(100%);
+    border: none;
+    background-image: url('../../icon/forward-solid-full.svg');
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 45px;
+    width: 45px;
+    background-color: transparent;
+}
+
+.forwardButton:active, .backButton:active {
+    background-size: 25px;
+}
+
+.playAndPauseButton:active {
+    box-shadow: 0px 0.6px 2px 1px black;
+}
+
+.playAndPauseButton, .forwardButton, .backButton:hover {
+    cursor: pointer;
+}
