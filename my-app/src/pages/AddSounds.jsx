@@ -1,19 +1,53 @@
-import React, {useState} from "react"
-import "../scss/addSoundsComponentsScss/Add_Sounds.scss"
-import ImageLayer from "../components/addSoundsComponents/ImageLayer"
-import Loader from "../components/addSoundsComponents/Loader"
-import Player from "../components/addSoundsComponents/playerAudio"
-
+import {useContext, useState} from "react"
+import {Link} from 'react-router-dom'
+import styleAddSoundsModule from "../scss/addSounds/AddSounds.module.scss"
+import ImageLayer from "../components/addSounds/ImageLayer"
+import Loader from "../components/addSounds/Loader"
+import Player from "../components/addSounds/playerAudio"
+import ProgressEffect from '../components/Progress'
+import { LogIn } from 'lucide-react'
+import { editorContext } from "../context/Context"
 
 function AddSounds() {
-    const [imagePath, setImagePath] = useState("/styles/images/sound-wave-angle-text-rectangle.png")
-
+    const {setClosePage} = useContext(editorContext)
+    const [imagePath, setImagePath] = useState(null)
+    const [pauseToLeave, setPauseToLeave] = useState(false)
     const [inputValue, setInputValue] = useState('')
-
     const [inputProgress, setInputProgress] = useState(0)
     const [applyButton, setApplyButton] = useState(false)
-
     const [title, setTitle] = useState('Add Audio')
+    const [titleSize, setTitleSize] = useState(`${styleAddSoundsModule.maxFontSize}`)
+    const [statusButton, setStatusButton] = useState(false)
+
+
+    const tempFile = async () => {
+        const file = await window.api.getJsonFile('toReact')
+        if(file.ERRO) {
+            window.api.removeFile('removeTemp', true)
+           alert('ERRO: Essa URL não pode ser usada')
+        }else {
+            setImagePath(file.thumbnail)
+            setTitle(file.title)
+            
+            if(file.title.length >= 20) {
+                setTitleSize(`${styleAddSoundsModule.minFontSize}`)
+            }
+        }
+        
+    }
+
+    const counter = () => {
+        for(let i = 0; i <= 100; i++) {
+            setTimeout(() => {
+                setInputProgress(i)
+                if(i >= 100) {
+                    setApplyButton(true)
+                    tempFile()
+                   
+                }
+            }, i* 70);
+        }
+    }
 
     const handleChange = (event) => {        
         setInputValue(event.target.value)
@@ -22,54 +56,101 @@ function AddSounds() {
     
     const handleButtonApply = () => {
         if(applyButton) {
-            return 'displayOn'
+            return `${styleAddSoundsModule.displayOn}` 
         }else {
-            return 'displayOff'
+            return `${styleAddSoundsModule.displayOff}`
         }
     }
 
     const handleButtonSend = () => {
         if(applyButton) {
-            return 'displayOff'
+            return `${styleAddSoundsModule.displayOff}`
         }else {
-            return 'displayOn'
+            return `${styleAddSoundsModule.displayOn}`
         }
     }
     
+
     const handleClick = async () => {
-        try{
-            await window.api.receive('download-progress', (progressData)=> {
-                setInputProgress(progressData)
-                if(progressData >= 100) {
-                    setApplyButton(true)
-                }
-            })
-            await window.api.startDownload('toMain', inputValue)
-            const thumbnail = await window.api.getThumbnailUrl('toReact', inputValue)
-            setImagePath(thumbnail)
-        } catch (err) {
+        if(inputValue === '') {
             alert('url space is empty')
+
+        }else if(inputValue.includes('www.youtube.com') || inputValue.includes('youtube.com')){
+            await window.api.startDownload('toMain', inputValue)
+            await counter()
         }
-        setInputValue('')
     }
 
-    return (
+    const handleRemoveFile = async (status) => {
+        await window.api.removeFile('removeTemp', status)
+    }
+
+    const displaySpecial = () => {
+        return handleButtonApply() === `${styleAddSoundsModule.displayOn}` ? `${styleAddSoundsModule.displayFlex}` : `${styleAddSoundsModule.displayOff}`
+    }
+
+    const handleReturnPage = () => {
+        setPauseToLeave(true)
+        handleRemoveFile(false)
+    }
+
+    const handleAppliedButton = async () => {
+        setStatusButton(true); 
+        await window.api.forDataBase('dataBase')
+        await setPauseToLeave(true)
+    }
+
+    return ( 
         <>
-            <header>
-                <h1 className="returnPage">voltar</h1>
-                <h1 className="addTitle">{title}</h1>
+            <header > 
+                <Link to='/' className={displaySpecial()}>
+                    <h1 className={styleAddSoundsModule.returnPage}
+                    onClick={handleReturnPage}>
+                        <LogIn style={{ rotate: '180deg'}} strokeWidth={3.5}/>
+                        voltar</h1>
+                </Link>
+                <Link to='/editorMode'>
+                    <h1 className={`${styleAddSoundsModule.editorPage} ${displaySpecial()}`} 
+                    onClick={() => setPauseToLeave(true)}
+                    >
+                        editar
+                        <LogIn  strokeWidth={3.5}/>
+                        </h1>
+                </Link>
+                
+                <div className={styleAddSoundsModule.boxHeader}>
+                    <h1 className={`${styleAddSoundsModule.addTitle} ${titleSize}`} >{title}</h1>
+                </div>
             </header>
             <ImageLayer imagePath={imagePath}/>
             <Loader width={inputProgress}/>
-            <Player progress={inputProgress}/>
-            <div className="itens">
-                <input type="text" class='input-text' placeholder="Cole a Url aqui" value={inputValue} onChange={handleChange}/>
-                <div class='button_place'>
-                    <button class='editar'>editar</button>
-                    <button class={`enviar ${handleButtonSend()}`} onClick={handleClick}>enviar</button>
-                    <button className={`enviar ${handleButtonApply()}`}>aplicar</button>
+            
+            {statusButton ? <ProgressEffect /> : ''}
+            
+            <Player progress={inputProgress} pauseToLeave={pauseToLeave}/>
+            <div className={styleAddSoundsModule.itens}>
+                
+                <input 
+                type="text" 
+                className={`${styleAddSoundsModule.inputText} ${handleButtonSend()}`} 
+                placeholder="Cole a Url aqui" 
+                onChange={handleChange}/>
+                
+                <div className={styleAddSoundsModule.buttonPlace}>
+                
+                    <Link to='/' style={{textDecoration: 'none'}} >
+                        <button className={`${styleAddSoundsModule.editar} ${handleButtonSend()}`}
+                        onClick={() => setClosePage(true)}
+                        >voltar</button>
+                    </Link>
+                    <button className={`${styleAddSoundsModule.editar} ${handleButtonApply()}`}
+                    onClick={() => {handleRemoveFile(true)}}  >cancelar</button>
+                    <button className={`${styleAddSoundsModule.enviar} ${handleButtonSend()}`} onClick={handleClick}>enviar</button>
+                    <button className={`${styleAddSoundsModule.enviar} ${handleButtonApply()}`}
+                    onClick={handleAppliedButton}>aplicar</button>
                 </div>
             </div>
+
         </>
     ) 
 }

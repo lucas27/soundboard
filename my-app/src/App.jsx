@@ -1,13 +1,19 @@
 import React from "react"
-// import HeaderButton from "./HeaderButton"
+import { Routes, Route } from "react-router-dom"
 import "./scss/App.scss"
+import MainPage from "./pages/Main"
 import AddSounds from "./pages/AddSounds" 
 import EditorMode from "./pages/EditorMode"
+import ButtonProvider, { EditorProvider } from "./context/Context"
 
 export const App = () => {
     return (
-        <AddSounds/>
-        // <EditorMode/>
-        // <HeaderButton/>
+        <ButtonProvider>
+            <Routes>
+                <Route path="/" element={<MainPage/>}></Route>
+                <Route path="/addSounds" element={<EditorProvider><AddSounds/></EditorProvider>}></Route>
+                <Route path="/editorMode" element={<EditorMode/>}></Route>
+            </Routes>
+        </ButtonProvider>
     )
 }

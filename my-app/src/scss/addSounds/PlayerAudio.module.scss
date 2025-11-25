@@ -1,0 +1,196 @@
+@import '../variables.scss';
+// @import 'component-playerAudio.css';
+
+
+.playerAudiodisplayShow {
+    display: flex;
+}
+
+.playerAudiodisplayHidden {
+    display: none;
+}
+
+.boxFather{
+    display: flex;
+    justify-content: center;
+    box-sizing: initial;
+}
+
+.boxPlayer {
+    position: relative;
+    width: 60%;
+    flex-direction: column;
+    align-items: center;
+    margin: 8px;
+    background: $background;
+    padding: 10px;
+    // background-color: #36363665; /* Cor branca com 20% de opacidade */
+    // background: rgba(30, 30, 30, 0.4); /* Cor #1E1E1E com 40% de opacidade */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+//     /* Sombra interna e externa para dar profundidade e brilho */
+    box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.2), /* Sombra externa */
+    inset 0 1px 0 rgba(255, 255, 255, 0.1), /* Brilho interno na parte superior */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1); /* Sombra interna na parte inferior */
+    border-radius: 20px;
+}
+
+.boxPlayer::after, .boxPlayer::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    // background-image: conic-gradient(from var(--angle), transparent, $textColor);
+    background: $textBackground;
+    translate: -50% -50%;
+    z-index: -1;
+    padding: 3.5px;
+    border-radius: 20px;
+    // animation: 3s spin linear infinite;
+    
+}
+.boxPlayer::before {
+    filter: blur(1.6em);
+    opacity: 0.2;
+}
+
+
+.boxBar {
+    // box-sizing: border-box;
+    // padding: 0;
+    top: 5px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 75%;
+    height: 12px;
+    // border: 4px solid $gradientGreen;
+    // border-radius: 10px;
+    // justify-content: flex-start;
+}
+
+.progressBar {
+    // position: absolute;
+    // position: relative;
+    --progress-bar: 0%;
+    appearance: none;
+    background: linear-gradient(to right, ($gradientBlue, $gradientGreen) var(--progress-bar), transparent 5%);
+    transition: all 0.3s ease;
+    border: 3px solid $gradientGreen;
+    border-radius: 20px;
+    // margin-right: -100px;
+    width: 100%;
+    height: 8px;
+    // margin: -20px;
+    // accent-color: $gradientGreen;
+    // justify-content: center;
+    // align-items: center;
+}
+
+.progressBar::-webkit-slider-runnable-track {
+    // background: linear-gradient(to right, $gradientBlue, $gradientGreen);
+    border-radius: 20px;
+    height: 100%;
+    margin-left: -2px;
+    margin-right: -3px;
+}
+.progressBar::-webkit-slider-thumb {
+    // -webkit-appearance: none;
+    appearance: none;
+    margin-top: -6px;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: $gradientGreen;
+    cursor: pointer;
+}
+
+.progressBar::-webkit-slider-thumb:active {
+    cursor: grabbing;
+}
+
+
+.time{
+    display: flex;
+    width: 80%;
+    margin-top: 12px;
+    justify-content: space-between;
+}
+
+.currentTime {
+    color: $gradientBlue;
+    font-family: $fontFamily;
+}
+
+.totalTime {
+    color: $gradientGreen;
+    font-family: $fontFamily;
+}
+
+.boxButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 50%;
+}
+
+.backButton {
+    display: flex;
+    background-color: transparent;
+    color: $textColor;
+    border-style: solid;
+    border-color: $textBackground;
+    border-width: 3px;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    width: 45px;
+    background-color: transparent;
+    border: none;
+    // border-radius: 10px;
+}
+
+
+.playAndPauseButton {
+    display: flex;
+    background-color: transparent;
+    color: $textColor;
+    border-style: solid;
+    border-color: $textBackground;
+    border-width: 3px;
+    justify-content: center;
+    align-items: center;
+    height: 38px;
+    width: 34px;
+    border-radius: 50%;
+}
+
+
+.forwardButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    color: $textColor;
+    height: 45px;
+    width: 45px;
+    background-color: transparent;
+}
+
+.forwardButton:active, .backButton:active {
+    color: black;
+}
+
+.playAndPauseButton:active {
+    color: black;
+    border-color: transparent;
+    box-shadow: 0px 0.6px 2px 1px black;
+}
+
+.playAndPauseButton, .forwardButton, .backButton:hover {
+    cursor: pointer;
+}
