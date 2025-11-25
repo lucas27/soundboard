@@ -1,1 +1,1 @@
-Software em desenvolvimento que está na sua versão 1.0.0
+Software finalizado
